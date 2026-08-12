@@ -1,0 +1,89 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ۱. مدل محصول اصلی
+model Product {
+  id           String  @id @default(uuid())
+  slug         String  @unique
+  name         String
+  price        Float
+  features     String
+  countInStock Int     @default(0)
+  category     String
+  brand        String?
+  discount     Float?  @default(0)
+  rating       Float?  @default(0)
+
+  // روابط (Relations): این خطوط به پریزما می‌گویند که این محصول به جداول دیگر وصل است
+  images     ProductImage[] // یک محصول می‌تواند چندین عکس داشته باشد
+  sizes      ProductSize[] // یک محصول می‌تواند چندین سایز داشته باشد
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ۲. جدول مستقل برای عکس‌های هر محصول
+model ProductImage {
+  id  String @id @default(uuid())
+  url String // آدرس ذخیره شده عکس (مثلاً /images/vitray1.jpg)
+
+  // اتصال به جدول محصول
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// ۳. جدول مستقل برای سایزهای هر محصول
+model ProductSize {
+  id   String @id @default(uuid())
+  name String // نام سایز (مثلاً: 30x30 یا 40x40)
+
+  // اتصال به جدول محصول
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+// ۴. جدول کاربران برای سیستم Auth
+model User {
+  id       String  @id @default(uuid())
+  name     String?
+  email    String  @unique
+  password String
+  role     String  @default("USER")
+  orders   Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  total     Float
+  createdAt DateTime @default(now())
+
+  // اتصال به کاربر
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // اتصال به آیتم‌های سفارش
+  items OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  quantity Int    @default(1)
+
+  // اتصال به سفارش
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // اتصال به محصول
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}

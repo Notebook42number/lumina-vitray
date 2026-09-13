@@ -97,7 +97,7 @@ The interface is designed to work across:
 Clone the repository:
 
 ```bash
-git clone https://github.com/Notebook42number/lumina-vitray.git
+git clone https://github.com/paricode-web/lumina-vitray.git
 ```
 
 Move into the project:

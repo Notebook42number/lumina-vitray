@@ -15,3 +15,78 @@
 .font-vazirmatn {
   font-family: "Vazirmatn", sans-serif;
 }
+
+/* ==========================================================
+   Lumina Vitray — Glass Palette
+   ========================================================== */
+
+@theme {
+  /* --- رنگ‌های اصلی پالت --- */
+  --color-primary: #A2D2FF;
+  --color-primary-light: #BDE0FE;
+  --color-accent: #FFAFCC;
+  --color-accent-light: #FFC8DD;
+  --color-secondary: #CDB4DB;
+
+  /* --- متن روی رنگ‌های روشن (کنتراست کافی) --- */
+  --color-primary-ink: #042C53;
+  --color-accent-ink: #4B1528;
+  --color-secondary-ink: #2A1B3D;
+
+  /* --- پس‌زمینه‌ی صنعتی تیره --- */
+  --color-bg-base: #0d0d0f;
+  --color-bg-surface: #17171a;
+}
+
+/* ==========================================================
+   کلاس‌های آماده‌ی گلس‌مورفیسم
+   className="glass-primary" یا "glass-accent" و ...
+   ========================================================== */
+
+@layer components {
+  .glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glass-primary {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+  }
+
+  .glass-accent {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  }
+
+  .glass-secondary {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--color-secondary) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-secondary) 25%, transparent);
+  }
+}
+
+/* ==========================================================
+   نحوه‌ی استفاده:
+
+   <body className="bg-bg-base font-vazirmatn">
+
+   <button className="bg-primary text-primary-ink hover:bg-primary-light rounded-lg px-5 py-2.5">
+     افزودن به سبد خرید
+   </button>
+
+   <span className="bg-accent text-accent-ink rounded-full px-3 py-1 text-sm">
+     ۲۰٪ تخفیف
+   </span>
+
+   <div className="glass-primary rounded-xl p-5">
+     محتوای کارت
+   </div>
+   ========================================================== */

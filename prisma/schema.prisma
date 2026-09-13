@@ -62,22 +62,30 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model Order {
-  id        String   @id @default(uuid())
-  total     Float
-  createdAt DateTime @default(now())
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+}
 
+model Order {
+  id        String      @id @default(uuid())
+  total     Float
+  createdAt DateTime    @default(now())
+  status    OrderStatus @default(PENDING)
   // اتصال به کاربر
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // اتصال به آیتم‌های سفارش
-  items OrderItem[]
+  items    OrderItem[]
+  payments Payment[]
 }
 
 model OrderItem {
   id       String @id @default(uuid())
   quantity Int    @default(1)
+  price    Float
 
   // اتصال به سفارش
   orderId String
@@ -86,4 +94,13 @@ model OrderItem {
   // اتصال به محصول
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  orderId   String
+  authority String   @unique
+  createdAt DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id])
 }

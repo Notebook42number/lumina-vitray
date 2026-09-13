@@ -16,13 +16,12 @@ export default async function AdminPage() {
 
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
-
-  if ((session.user as any).role !== "ADMIN") {
-    redirect("/");}
-
+if (!session) {
+  redirect("/login")
+}
+if (session.user.role !== "ADMIN") {
+  redirect("/")
+}
   const users = await prisma.user.findMany({
   include: {
     orders: {
@@ -104,7 +103,7 @@ async function uploadImage(formData: FormData) {
       }
     });
 
-    redirect("/");
+  
 
   }
 
@@ -137,66 +136,70 @@ async function deleteItem (formdata:FormData) {
   });redirect("/admin");
 }
 
-
-
-
-  
-  return (
+return (
   <main
     dir="rtl"
     className="min-h-screen relative overflow-hidden bg-[#eef6ff]"
   >
     {/* Background */}
     <div className="absolute inset-0 -z-10">
-      <div className="absolute top-0 left-0 h-[500px] w-[500px] rounded-full bg-sky-300/30 blur-[140px]" />
+      <div className="absolute top-0 left-0 h-[300px] w-[300px] md:h-[500px] md:w-[500px] rounded-full bg-primary/30 blur-[100px] md:blur-[140px]" />
 
-      <div className="absolute bottom-0 right-0 h-[450px] w-[450px] rounded-full bg-blue-400/20 blur-[120px]" />
+      <div className="absolute bottom-0 right-0 h-[300px] w-[300px] md:h-[450px] md:w-[450px] rounded-full bg-secondary/20 blur-[90px] md:blur-[120px]" />
 
-      <div className="absolute left-1/2 top-1/2 h-[650px] w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-200/20 blur-[170px]" />
+      <div className="absolute left-1/2 top-1/2 h-[400px] w-[400px] md:h-[650px] md:w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px] md:blur-[170px]" />
     </div>
 
-    <div className="max-w-7xl mx-auto px-5 md:px-8 py-12">
+
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
+
 
       {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-5xl font-bold text-sky-900">
+      <div className="mb-8 md:mb-10">
+
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-ink">
           پنل مدیریت Lumina
         </h1>
 
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-sm md:text-base text-neutral-500">
           مدیریت محصولات، تصاویر و سفارشات
         </p>
+
       </div>
 
+
+
       {/* Top Cards */}
-      <div
-        className="
-        grid
-        grid-cols-1
-        xl:grid-cols-3
-        gap-8
+      <div className="
+        grid 
+        grid-cols-1 
+        md:grid-cols-2 
+        xl:grid-cols-3 
+        gap-5 
+        md:gap-8
         items-start
-      "
-      >
+      ">
+
 
         {/* Create Product */}
-
         <div
           className="
-          rounded-3xl
-          bg-white/50
-          backdrop-blur-2xl
-          border
-          border-white/40
-          shadow-xl
-          p-8
-        "
+          rounded-3xl 
+          bg-white/50 
+          backdrop-blur-2xl 
+          border border-white/40 
+          shadow-xl 
+          p-5 
+          md:p-8
+          "
         >
-          <form action={createProduct} className="space-y-5">
 
-            <h2 className="text-2xl font-bold text-sky-900">
+          <form action={createProduct} className="space-y-4 md:space-y-5">
+
+            <h2 className="text-xl md:text-2xl font-bold text-primary-ink">
               افزودن محصول
             </h2>
+
 
             <input
               type="text"
@@ -204,18 +207,21 @@ async function deleteItem (formdata:FormData) {
               placeholder="نام محصول"
               required
               className="
-              w-full
-              rounded-xl
-              border
-              border-slate-300
-              bg-white/70
-              px-4
+              w-full 
+              rounded-xl 
+              border 
+              border-neutral-300 
+              bg-white/70 
+              px-4 
               py-3
-              outline-none
-              focus:ring-4
-              focus:ring-sky-300/40
-            "
+              text-sm
+              md:text-base
+              outline-none 
+              focus:ring-4 
+              focus:ring-primary/30
+              "
             />
+
 
             <input
               type="number"
@@ -223,96 +229,127 @@ async function deleteItem (formdata:FormData) {
               placeholder="قیمت"
               required
               className="
-              w-full
-              rounded-xl
-              border
-              border-slate-300
-              bg-white/70
-              px-4
+              w-full 
+              rounded-xl 
+              border 
+              border-neutral-300 
+              bg-white/70 
+              px-4 
               py-3
-              outline-none
-              focus:ring-4
-              focus:ring-sky-300/40
-            "
+              text-sm
+              md:text-base
+              outline-none 
+              focus:ring-4 
+              focus:ring-primary/30
+              "
             />
+
 
             <button
               className="
-              w-full
-              rounded-xl
-              bg-sky-600
-              hover:bg-sky-700
-              text-white
-              py-3
-              transition
-            "
+              w-full 
+              rounded-xl 
+              bg-primary 
+              hover:bg-primary-light 
+              text-primary-ink 
+              py-3 
+              text-sm
+              md:text-base
+              transition 
+              font-medium
+              "
             >
               ذخیره محصول
             </button>
 
+
           </form>
+
         </div>
 
-        {/* Upload */}
 
+
+
+
+        {/* Upload */}
         <div
           className="
-          rounded-3xl
-          bg-white/50
-          backdrop-blur-2xl
-          border
-          border-white/40
-          shadow-xl
-          p-8
-        "
+          rounded-3xl 
+          bg-white/50 
+          backdrop-blur-2xl 
+          border border-white/40 
+          shadow-xl 
+          p-5 
+          md:p-8
+          "
         >
+
           <PictureManager
             products={products}
             uploadImage={uploadImage}
           />
+
         </div>
+
+
+
+
 
         {/* Orders */}
-
         <div
           className="
-          rounded-3xl
-          bg-white/50
-          backdrop-blur-2xl
-          border
-          border-white/40
-          shadow-xl
-          p-8
-          max-h-[600px]
+          rounded-3xl 
+          bg-white/50 
+          backdrop-blur-2xl 
+          border border-white/40 
+          shadow-xl 
+          p-5 
+          md:p-8
+          max-h-[500px]
+          md:max-h-[600px]
           overflow-y-auto
-        "
+          "
         >
+
           <OrderManager users={users} />
+
         </div>
+
 
       </div>
 
-      {/* Product Manager */}
 
+
+
+
+
+      {/* Product Manager */}
       <div
         className="
-        mt-10
-        rounded-3xl
-        bg-white/50
-        backdrop-blur-2xl
-        border
-        border-white/40
-        shadow-xl
-        p-8
-      "
+        mt-8
+        md:mt-10
+        rounded-3xl 
+        bg-white/50 
+        backdrop-blur-2xl 
+        border border-white/40 
+        shadow-xl 
+        p-5 
+        md:p-8
+        "
       >
+
         <ProductManager
           products={products}
           deleteItem={deleteItem}
           updateProduct={updateProduct}
         />
+
       </div>
 
+
     </div>
+
+
   </main>
-);  }
+)
+  ;  }

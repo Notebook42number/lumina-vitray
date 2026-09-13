@@ -1,50 +1,47 @@
-// lib/store/cart-store.ts
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-// این تایپ باید با فیلدهای مدل Product تو هماهنگ باشه
 export type CartItem = {
-  productId: string
-  name: string
-  price: number
-  image: string
-  quantity: number
-}
+  productId: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+};
 
 type CartState = {
-  items: CartItem[]
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void
-  removeFromCart: (productId: string) => void
-  updateQuantity: (productId: string, quantity: number) => void
-  clearCart: () => void
-}
+  items: CartItem[];
+  addToCart: (item: Omit<CartItem, "quantity">) => void;
+  removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  getTotalPrice: () => number;
+  clearCart: () => void;
+};
 
 export const useCartStore = create<CartState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       items: [],
 
       addToCart: (item) =>
         set((state) => {
           const existingItem = state.items.find(
             (i) => i.productId === item.productId
-          )
+          );
 
           if (existingItem) {
-            // اگه محصول از قبل توی سبد هست، فقط تعدادشو زیاد کن
             return {
               items: state.items.map((i) =>
                 i.productId === item.productId
                   ? { ...i, quantity: i.quantity + 1 }
                   : i
               ),
-            }
+            };
           }
 
-          // محصول جدیده، به لیست اضافه کن
           return {
             items: [...state.items, { ...item, quantity: 1 }],
-          }
+          };
         }),
 
       removeFromCart: (productId) =>
@@ -59,10 +56,19 @@ export const useCartStore = create<CartState>()(
           ),
         })),
 
+      getTotalPrice: () => {
+        const items = get().items;
+
+        return items.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+      },
+
       clearCart: () => set({ items: [] }),
     }),
     {
-      name: 'lumina-cart-storage', // اسم کلید توی localStorage
+      name: "lumina-cart-storage",
     }
   )
-)
+);

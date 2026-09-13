@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={katibeh.variable}>
+      <body className={`${katibeh.variable} bg-bg-base font-vazirmatn min-h-screen`} >
         <Toaster position="top-center" />
         <AuthProvider>
         {children}

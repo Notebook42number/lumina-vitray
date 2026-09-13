@@ -13,12 +13,8 @@ export default function CartPage(){
 const items=useCartStore((state)=>state.items)
 const removeFromCart=useCartStore((state)=>state.removeFromCart)
   const updateQuantity = useCartStore((state) => state.updateQuantity)
+const totalPrice = useCartStore((state) => state.getTotalPrice())
 
-
-  const totalPrice = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  )
 
   // حالت خالی بودن سبد
   if (items.length === 0) {
@@ -30,71 +26,235 @@ const removeFromCart=useCartStore((state)=>state.removeFromCart)
         </Link>
       </div>
     )
-  }
-    return(
+  }return (
+  <div
+    dir="rtl"
+    className="mx-auto max-w-3xl px-4 pb-16 pt-28 sm:px-6"
+  >
 
-  
-    <div dir="rtl" className="max-w-3xl mx-auto px-4 pt-32 pb-16">
-      <h1 className="text-2xl font-bold text-rose-950 mb-8">سبد خرید</h1>
+    <h1
+      className="
+      mb-8
+      text-2xl
+      font-bold
+      text-neutral-100
+      sm:text-3xl
+      "
+    >
+      سبد خرید
+    </h1>
 
-      <div className="flex flex-col gap-4">
-        {items.map((item) => (
-          <div
-            key={item.productId}
-            className="flex items-center gap-4 bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/20"
-          >
+
+    <div className="flex flex-col gap-4">
+
+      {items.map((item) => (
+
+        <div
+          key={item.productId}
+          className="
+          flex
+          flex-col
+          gap-4
+          rounded-2xl
+          border
+          border-white/10
+          bg-white/5
+          p-4
+          backdrop-blur-md
+          sm:flex-row
+          sm:items-center
+          "
+        >
+
+          {/* Image + name */}
+          <div className="flex flex-1 items-center gap-4">
+
             <Image
-              src={item.image}
+              src={item.image || "/images/placeholder.jpg"}
               alt={item.name}
               width={80}
               height={80}
-              className="rounded-xl object-cover"
+              className="
+              h-16
+              w-16
+              rounded-xl
+              object-cover
+              sm:h-20
+              sm:w-20
+              "
             />
 
-            <div className="flex-1">
-              <p className="font-medium text-rose-950">{item.name}</p>
-              <p className="text-sm text-rose-800/70">
+
+            <div>
+
+              <p
+                className="
+                font-medium
+                text-neutral-100
+                "
+              >
+                {item.name}
+              </p>
+
+
+              <p className="mt-1 text-sm text-neutral-400">
                 {item.price.toLocaleString()} تومان
               </p>
+
             </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                disabled={item.quantity <= 1}
-                className="w-7 h-7 rounded-full bg-rose-100 hover:bg-rose-200 disabled:opacity-30 transition"
-              >
-                -
-              </button>
-              <span className="w-6 text-center">{item.quantity}</span>
-              <button
-                onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                className="w-7 h-7 rounded-full bg-rose-100 hover:bg-rose-200 transition"
-              >
-                +
-              </button>
-            </div>
+          </div>
+
+
+
+          {/* Quantity */}
+
+          <div
+            className="
+            flex
+            items-center
+            justify-between
+            gap-3
+            sm:justify-center
+            "
+          >
 
             <button
-              onClick={() => removeFromCart(item.productId)}
-              className="text-sm text-rose-600 hover:text-rose-800 transition"
+              onClick={() =>
+                updateQuantity(
+                  item.productId,
+                  item.quantity - 1
+                )
+              }
+              disabled={item.quantity <= 1}
+              className="
+              flex
+              h-8
+              w-8
+              items-center
+              justify-center
+              rounded-full
+              bg-white/10
+              text-neutral-100
+              transition
+              hover:bg-white/20
+              disabled:opacity-30
+              "
             >
-              حذف
+              -
             </button>
-          </div>
-        ))}
-      </div>
 
-      <div className="mt-8 flex items-center justify-between border-t border-rose-200 pt-4">
-        <span className="text-lg font-bold text-rose-950">
-          جمع کل: {totalPrice.toLocaleString()} تومان
-        </span>
-        <Link 
-        href="/checkout"
-        className="bg-rose-800 text-white px-6 py-3 rounded-xl hover:bg-rose-900 transition">
-          ادامه فرآیند خرید
-        </Link>
-      </div>
+
+            <span className="w-6 text-center text-neutral-100">
+              {item.quantity}
+            </span>
+
+
+            <button
+              onClick={() =>
+                updateQuantity(
+                  item.productId,
+                  item.quantity + 1
+                )
+              }
+              className="
+              flex
+              h-8
+              w-8
+              items-center
+              justify-center
+              rounded-full
+              bg-white/10
+              text-neutral-100
+              transition
+              hover:bg-white/20
+              "
+            >
+              +
+            </button>
+
+          </div>
+
+
+
+          {/* Remove */}
+
+          <button
+            onClick={() =>
+              removeFromCart(item.productId)
+            }
+            className="
+            text-sm
+            text-neutral-400
+            transition
+            hover:text-red-400
+            "
+          >
+            حذف
+          </button>
+
+
+        </div>
+
+      ))}
+
     </div>
-    )
+
+
+
+    {/* Checkout */}
+
+    <div
+      className="
+      mt-8
+      flex
+      flex-col
+      gap-5
+      border-t
+      border-white/10
+      pt-6
+      sm:flex-row
+      sm:items-center
+      sm:justify-between
+      "
+    >
+
+      <span
+        className="
+        text-lg
+        font-bold
+        text-neutral-100
+        "
+      >
+        جمع کل:
+        {" "}
+        {totalPrice.toLocaleString()}
+        {" "}
+        تومان
+      </span>
+
+
+      <Link
+        href="/checkout"
+        className="
+        rounded-xl
+        bg-primary
+        px-6
+        py-3
+        text-center
+        font-medium
+        text-primary-ink
+        transition
+        hover:bg-primary-light
+        "
+      >
+        ادامه فرآیند خرید
+      </Link>
+
+
+    </div>
+
+
+  </div>
+)
 }

@@ -13,9 +13,12 @@ export default async function ProductDetailPage({
 }: ProductPageProps) {
   const { slug } = await params;
 
+const decodedSlug = decodeURIComponent(slug);
+console.log("RECEIVED SLUG:", slug);
+console.log("DECODED SLUG:", decodeURIComponent(slug));
   const product = await prisma.product.findUnique({
     where: {
-      slug: slug,
+      slug:decodedSlug,
     },
     include: {
       images: true,

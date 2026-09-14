@@ -14,8 +14,6 @@
     "@prisma/adapter-better-sqlite3": "^7.8.0",
     "@prisma/client": "6.19.3",
     "@prisma/config": "7.8.0",
-    "@supabase/ssr": "^0.12.0",
-    "@supabase/supabase-js": "^2.108.2",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.11.1",
     "framer-motion": "^12.40.0",
